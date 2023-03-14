@@ -1,17 +1,58 @@
-
-name: "Lead Collection"
-# You can have as many pipelines as you want
+name: "Upcoming cohorts report"
 pipelines:
-    # Unique name for your pipeline
-  - slug: "testing_pipeline"
-    # During local development these are CSV files located at te ./sources folder.
-    sources:
-      # The order is relevant, this sources will be passed as parameters to the run() function in the same order
-      - names
-      - salutations
-    # Ignored during local development, its the datasource to wich the pipeline data will be saved to
-    destination: sample_csv
-    # Order is relevant, they will execute one on top of the other.
+  - slug: "preprocessing_form_entry"
+    sources: 
+      - heroku-form-entry
+      - cohort-users
+      - auth-user
+      - 4geeks-academies-alias
+    destination: preprocessed-form-entry
     transformations:
-      - build_hello_world
-      - add_salutation
+      - form_entries_in_cohort_users
+      - clean_columns_form_entry
+
+  - slug: "identify_upcoming_cohorts"
+    sources: 
+      - cohorts
+      - 4geeks-academies-alias
+    destination: upcoming-cohorts
+    transformations:
+      - add_academy_name_to_cohorts
+      - select_upcoming_cohorts
+
+  - slug: "assign_cohort_to_form_entry"
+    sources: 
+      - preprocessed-form-entry
+      - upcoming-cohorts
+    destination: form-entry-with-cohort-assignation
+    transformations:
+      - assign_cohort
+
+  - slug: "unassigned_form_entries"
+    sources: 
+      - form-entry-with-cohort-assignation
+      - 4geeks-academies-alias
+    destination: form-entries-without-expected-cohort
+    transformations:
+      - add_academy_name_to_unassigned
+      - filter_unassigned
+      - select_columns_unassigned
+
+  - slug: "upcoming_cohorts_confirmed_students"
+    sources: 
+      - cohort-users
+      - auth-user
+      - upcoming-cohorts
+    destination: confirmed-students-upcoming-cohorts
+    transformations:
+      - confirmed_students_from_upcoming_cohorts
+
+  - slug: "merge_confirmed_assigned_students"
+    sources: 
+      - form-entry-with-cohort-assignation
+      - confirmed-students-upcoming-cohorts
+      - upcoming-cohorts
+    destination: upcoming-cohorts-students
+    transformations:
+      - merge_confirmed_assigned
+      - clean_upcoming_cohorts_students
