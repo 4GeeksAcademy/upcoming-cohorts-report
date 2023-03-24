@@ -41,14 +41,14 @@ email = ['email_1@mail.com', 'email_4@mail.com', 'email_3@mail.com', np.nan, np.
 assigned = [1, 1, 1, np.nan, np.nan, 0]
 confirmed = [1, 0, 0, np.nan, np.nan, 1]
 location = ['location_1', np.nan, np.nan, np.nan, np.nan, np.nan]
-ac_deal_id = [1111, 4444, 3333, np.nan, np.nan, np.nan]
+deal_id = [1111, 4444, 3333, np.nan, np.nan, np.nan]
 deal_owner = ['Owner_1', 'Owner_4', np.nan, np.nan, np.nan, np.nan]
 form_created_at = ['2023-01-01 15:16:00', '2023-01-04 15:16:00', '2023-01-03 15:16:00', np.nan, np.nan, np.nan]
 educational_status = ['status_1', np.nan, np.nan, np.nan, np.nan, 'status_5']
 inscription_created_at = ['2023-02-01 20:30:00', np.nan, np.nan, np.nan, np.nan, '2023-02-05 20:30:00']
 
 dict_output = {'slug':slug, 'email':email, 'assigned':assigned, 'confirmed':confirmed, 'location':location,
-                'ac_deal_id':ac_deal_id, 'deal_owner':deal_owner, 'form_created_at':form_created_at, 'educational_status':educational_status, 'inscription_created_at':inscription_created_at}
+                'deal_id':deal_id, 'deal_owner':deal_owner, 'form_created_at':form_created_at, 'educational_status':educational_status, 'inscription_created_at':inscription_created_at}
 
 ### Expected output ###
 expected_output = pd.DataFrame(dict_output)
